@@ -1,0 +1,14 @@
+header {
+    background-color: black;
+    border-width: 1px;
+    border-color: black;
+    border-bottom-style: solid;
+}
+
+header img {
+    background: white;
+    border-radius: 50%;
+}
+
+
+

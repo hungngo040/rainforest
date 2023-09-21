@@ -1,0 +1,36 @@
+<!--
+RMIT University Vietnam
+Course: COSC2430 Web Programming
+Semester: 2023B
+Assessment: Assignment 3
+Author: Group 21
+-->
+
+<%- include('partials/header.ejs') %>
+
+<main class="d-flex justify-content-center">
+  <div class="col-8">
+  <h1>Create Account</h1>
+  <form action="/vendor" method="POST">
+    <label for="username">Name:</label>
+    <input type="text" name="username"  class="form-control"  placeholder="Username" required><br>
+
+    <label for="password">Password</label>
+    <input type="text" name="password"  class="form-control"  placeholder="Password" required><br>
+
+    <label for="Business_name">Business name:</label>
+    <input type="text" name="Business_name"  class="form-control"  placeholder="Business name" required ></input><br>
+
+
+    <label for="Business_address">Business address:</label>
+    <input type="text" name="Business_address"  class="form-control"  placeholder="Business address" required><br>
+
+   
+    <input class="btn btn-success w-100 py-2" type="submit" value="Create">
+  </form>
+  </div>
+</main>
+
+<%- include('partials/footer.ejs') %>
+
+
