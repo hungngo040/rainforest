@@ -2,7 +2,8 @@ header {
     box-shadow: 1px 1px 1px 1px darkgray;
 }
 
-header ul li a:hover {
+header ul li a:hover,
+footer ul li a:hover {
     color: #398F36 !important;
 }
 
