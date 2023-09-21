@@ -137,8 +137,25 @@ app.use(express.urlencoded({ extended: true }));
 
 // Show the home page
 app.get('/', (req, res) => {
-  res.render('index');
+  Product.find()
+    .then((products) => {
+        res.render('index', {products: products});
+    })
+    .catch((error) => console.log(error.message));
 });
+
+app.get('/view-product/:id', (req, res) => {
+  Product.findById(req.params.id)
+  .then((product) => {
+    if (!product) {
+      return res.send("Cannot found that ID!");
+    }
+    res.render('view-product', {product: product});
+  })
+  .catch((error) => res.send(error));
+});
+
+
 
 app.get('/register', (req, res) => {
   res.render('register');
