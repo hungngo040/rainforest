@@ -1,14 +1,12 @@
 header {
-    background-color: black;
-    border-width: 1px;
-    border-color: black;
-    border-bottom-style: solid;
+    box-shadow: 1px 1px 1px 1px darkgray;
 }
 
-header img {
+header ul li a:hover {
+    color: #398F36 !important;
+}
+
+/* header img {
     background: white;
     border-radius: 50%;
-}
-
-
-
+} */

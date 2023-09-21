@@ -17,8 +17,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.net/rainforestDB?retryWrites=true&w=majority&appName=AtlasApp')
-.then(() => console.log('Connected to MongoDB Atlas'))
-.catch((error) => console.log(error.message));
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((error) => console.log(error.message));
 
 
 
@@ -26,54 +26,54 @@ mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.n
 
 
 const VendorSchema = new mongoose.Schema({
-  username:{
+  username: {
     type: String,
     required: true,
     unique: true,
-    maxlenght: 15,
-    minlenght: 8,
+    maxlength: 15,
+    minlength: 8,
     uppercase: true,
-    lowercase:true,
-    nonAlpha:true,
-    number:true
+    lowercase: true,
+    nonAlpha: true,
+    number: true
   },
-  password:{
+  password: {
     type: String,
     required: true,
   },
-  profile_picture:{
+  profile_picture: {
     type: Number
   },
-  Business_name:{
+  Business_name: {
     type: String,
     required: true
   },
-  Business_address:{
+  Business_address: {
     type: String,
     required: true
   }
- 
+
 });
 
 
 const CustomerSchema = new mongoose.Schema({
-  username:{
+  username: {
     type: String,
     required: true,
     unique: true
   },
-  password:{
+  password: {
     type: String,
     required: true
   },
-  profile_picture:{
+  profile_picture: {
     type: Number
   },
-  name:{
+  name: {
     type: String,
     required: true
   },
-  address:{
+  address: {
     type: String,
     required: true
   }
@@ -81,32 +81,58 @@ const CustomerSchema = new mongoose.Schema({
 });
 
 const ShipperSchema = new mongoose.Schema({
-  username:{
+  username: {
     type: String,
     required: true,
     unique: true
   },
-  password:{
+  password: {
     type: String,
     required: true
   },
-  profile_picture:{
+  profile_picture: {
     type: Number
   },
-  assigned_distribution_hub:{
+  assigned_distribution_hub: {
     type: String,
-    enum: ['Hanoi','Danang','HoChiMinh']}
+    enum: ['Hanoi', 'Danang', 'HoChiMinh']
+  }
 
 });
 
-// Define a model based on the schema
-const Vendor = mongoose.model('Vendor',VendorSchema);
+const ProductSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 10,
+    maxlength: 20,
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  image: {
+    data: Buffer,
+    contentType: String,
+  },
+  description: {
+    type: String,
+    required: true,
+    maxLength: 500,
+  },
+});
 
-const Customer = mongoose.model('Customer',CustomerSchema);
+// Define a model based on the schema
+const Vendor = mongoose.model('Vendor', VendorSchema);
+
+const Customer = mongoose.model('Customer', CustomerSchema);
 
 const Shipper = mongoose.model('Shipper', ShipperSchema);
 
-app.use(express.urlencoded({extended: true}));
+const Product = mongoose.model('Product', ProductSchema);
+
+app.use(express.urlencoded({ extended: true }));
 
 
 // Show the home page
@@ -119,7 +145,7 @@ app.get('/register', (req, res) => {
 })
 
 // Show create  vendor account form
-app.get('/vendor-new',(req,res)=>{
+app.get('/vendor-new', (req, res) => {
   res.render('create-vendor-account')
 });
 
@@ -133,7 +159,7 @@ app.post('/vendor', (req, res) => {
 });
 
 // Show create custoner account form
-app.get('/customer-new',(req,res)=>{
+app.get('/customer-new', (req, res) => {
   res.render('create-customer-account')
 });
 
@@ -141,14 +167,14 @@ app.get('/customer-new',(req,res)=>{
 app.post('/customer', (req, res) => {
   console.log(req.body);
   const customer = new Customer(req.body);
-customer.save()
+  customer.save()
     .then(() => res.send('Create account successful'))
     .catch(error => res.send(error));
 });
 
 
 // Show create shipper account form
-app.get('/shipper-new',(req,res)=>{
+app.get('/shipper-new', (req, res) => {
   res.render('create-shipper-account')
 });
 
@@ -156,13 +182,29 @@ app.get('/shipper-new',(req,res)=>{
 app.post('/shipper', (req, res) => {
   console.log(req.body);
   const shipper = new Shipper(req.body);
-shipper.save()
+  shipper.save()
     .then(() => res.send('Create account successful'))
     .catch(error => res.send(error));
 });
 
+// For vendors to view their products
+app.get('/vendor-view-products', (req, res) => {
+  res.render('vendor-view-products')
+});
 
+// For vendors to add new products
+app.get('/vendor-add-products', (req, res) => {
+  res.render('vendor-add-products')
+});
 
+// add new product
+app.post('/product', (req, res) => {
+  console.log(req.body);
+  const product = new Product(req.body);
+  product.save()
+    .then(() => res.send('Save product successfully'))
+    .catch(error => res.send(error));
+});
 
 app.listen(port, function () {
   console.log(`Server started on: http://localhost:${port}`);
