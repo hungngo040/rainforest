@@ -1,0 +1,56 @@
+<%- include('partials/header.ejs') %>
+
+<%# Placeholder for product list %>
+<% const products = [
+  {
+    name: 'Product 1',
+    price: 100,
+    quantity: 10
+  },
+  {
+    name: 'Product 2',
+    price: 200,
+    quantity: 20
+  },
+  {
+    name: 'Product 3',
+    price: 300,
+    quantity: 30
+  },
+] %>
+
+<main>
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb py-2 my-3">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">View My Products</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="container my-3 py-2">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+          <th scope="col">Stock</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        <% for (let i = 0; i < products.length; i++) { %>
+        <tr>
+          <td><%= i+1 %></td>
+          <td><%= products[i].name %></td>
+          <td><%= products[i].price.toFixed(2) %></td>
+          <td><%= products[i].quantity %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+
+<%- include('partials/footer.ejs') %>
