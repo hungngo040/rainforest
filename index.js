@@ -119,7 +119,7 @@ const ProductSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    maxLength: 500,
+    maxlength: 500,
   },
 });
 
@@ -221,6 +221,16 @@ app.post('/product', (req, res) => {
   product.save()
     .then(() => res.send('Save product successfully'))
     .catch(error => res.send(error));
+});
+
+// Shipper page
+app.get('/shipper', (req, res) => {
+  res.render('shipper')
+});
+
+// Shipper order detail page
+app.get('/shipper-order-detail', (req, res) => {
+  res.render('shipper-order-detail')
 });
 
 app.listen(port, function () {

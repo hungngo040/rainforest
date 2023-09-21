@@ -11,7 +11,7 @@
   </div>
 
   <div id="add-product-form" class="container">
-    <div class="row my-3 py-2">
+    <div class="row my-4 py-4">
       <div class="col">
         <h2>Add New Product</h2>
       </div>
@@ -22,7 +22,7 @@
           <label for="name">Product Name</label>
         </div>
         <div class="col-lg-6 col-md-12 my-1">
-          <input type="text" name="name" id="product-name" class="form-control" style="width: 100%;">
+          <input type="text" name="name" id="product-name" class="form-control w-100" required>
         </div>
       </div>
       <div class="row my-3">
@@ -30,7 +30,7 @@
           <label for="price">Price</label>
         </div>
         <div class="col-lg-6 col-md-12 my-1">
-          <input type="number" name="price" id="product-price" class="form-control" style="width: 100%;">
+          <input type="number" name="price" id="product-price" class="form-control w-100" required>
         </div>
       </div>
       <div class="row my-3">
@@ -38,7 +38,7 @@
           <label for="product-image">Image</label>
         </div>
         <div class="col-lg-6 col-md-12 my-1">
-          <input type="file" name="image" id="product-image" class="form-control" style="width: 100%;">
+          <input type="file" name="image" id="product-image" class="form-control w-100">
         </div>
       </div>
       <div class="row my-3">
@@ -46,12 +46,12 @@
           <label for="description">Product Description</label>
         </div>
         <div class="col-lg-6 col-md-12 my-1">
-          <textarea name="description" id="product-description" rows="5" class="form-control" style="width: 100%;"
+          <textarea name="description" id="product-description" rows="5" class="form-control w-100" required
             placeholder="Max. 500 characters"></textarea>
         </div>
       </div>
-      <div class="row my-3">
-        <div class="col-3">
+      <div class="row py-2 my-3">
+        <div class="col-3 mx-auto">
           <input type="submit" value="Submit" class="form-control btn btn-success">
         </div>
       </div>

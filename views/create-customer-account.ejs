@@ -12,27 +12,25 @@ Author: Group 21
 
 <main class="d-flex justify-content-center">
   <div class="col-8">
-  <h1>Create Account</h1>
-  <form action="/customer" method="POST">
-    <label for="username">User name:</label>
-    <input type="text" name="username" class="form-control"  placeholder="Username" required><br>
+    <h1>Create Account</h1>
+    <form action="/customer" method="POST">
+      <label for="username">User name:</label>
+      <input type="text" name="username" class="form-control" placeholder="Username" required><br>
 
-    <label for="password">Password</label>
-    <input type="text" name="password" class="form-control"  placeholder="Password"  required><br>
+      <label for="password">Password</label>
+      <input type="password" name="password" class="form-control" placeholder="Password" required><br>
 
-    <label for="name">Name:</label>
-    <input type="text" name="name" class="form-control"  placeholder="Name" required ></input><br>
+      <label for="name">Name:</label>
+      <input type="text" name="name" class="form-control" placeholder="Name" required></input><br>
 
 
-    <label for="address">Address:</label>
-    <input type="text" name="address" class="form-control"  placeholder="Address" required><br>
+      <label for="address">Address:</label>
+      <input type="text" name="address" class="form-control" placeholder="Address" required><br>
 
-   
-    <input class="btn btn-success w-100 py-2" type="submit" value="Create">
-  </form>
-</div>
+
+      <input class="btn btn-success w-100 py-2" type="submit" value="Create">
+    </form>
+  </div>
 </main>
 
 <%- include('partials/footer.ejs') %>
-
-
