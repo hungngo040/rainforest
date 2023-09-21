@@ -9,13 +9,28 @@ Author: Group 21
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 const app = express();
-const passwordValidator = require('password-validator');
+const bodyParser = require('body-parser');
+const LocalStrategy = require("passport-local");
+const passport = require('passport');
+const passportLocalMongoose = require("passport-local-mongoose")
 const port = 3000;
-
+const User = require("./model/User");
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require("express-session")({
+    secret: "Rusty is a dog",
+    resave: false,
+    saveUninitialized: false
+}));
+  
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+  
 mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.net/rainforestDB?retryWrites=true&w=majority&appName=AtlasApp')
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.log(error.message));
@@ -32,10 +47,7 @@ const VendorSchema = new mongoose.Schema({
     unique: true,
     maxlength: 15,
     minlength: 8,
-    uppercase: true,
-    lowercase: true,
-    nonAlpha: true,
-    number: true
+    
   },
   password: {
     type: String,
@@ -121,6 +133,9 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     maxLength: 500,
   },
+  category: {
+    enum: ['Smartphone','Laptop','Acessories']
+  }
 });
 
 // Define a model based on the schema
@@ -205,6 +220,57 @@ app.post('/product', (req, res) => {
     .then(() => res.send('Save product successfully'))
     .catch(error => res.send(error));
 });
+
+// Showing secret page
+app.get("/secret", isLoggedIn, function(req, res) {
+  res.render("secret");
+});
+
+//Showing login form
+app.get("/login", function (req, res) {
+  res.render("login");
+});
+
+//Handling user login
+app.post("/login", async function(req, res){
+  try {
+      // check if the user exists
+      const user = await User.findOne({ username: req.body.username });
+      if (user) {
+        //check if password matches
+        const result = req.body.password === user.password;
+        if (result) {
+          res.render("secret");
+        } else {
+          res.status(400).json({ error: "password doesn't match" });
+        }
+      } else {
+        res.status(400).json({ error: "User doesn't exist" });
+      }
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+});
+
+//Handling user logout 
+app.get("/logout", function (req, res) {
+  req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
+});
+
+
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/login");
+}
+
+
+
+
+
 
 app.listen(port, function () {
   console.log(`Server started on: http://localhost:${port}`);
