@@ -12,19 +12,22 @@ const app = express();
 const bodyParser = require('body-parser');
 const LocalStrategy = require("passport-local");
 const passport = require('passport');
-const passportLocalMongoose = require("passport-local-mongoose")
+const passportLocalMongoose = require("passport-local-mongoose");
+const bcrypt = require('bcrypt');
 const port = 3000;
 const User = require("./model/User");
 app.set('view engine', 'ejs');
 
+
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require("express-session")({
-    secret: "Rusty is a dog",
-    resave: false,
-    saveUninitialized: false
+  secret: "Rusty is a dog",
+  resave: false,
+  saveUninitialized: false
 }));
-  
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -39,23 +42,32 @@ mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.n
 
 // Define schema
 
-
 const VendorSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
+    index: { unique: true },
     maxlength: 15,
     minlength: 8,
-    
+    validate: {
+      validator: function(value) {
+        return /^[a-zA-Z0-9]+$/.test(value);
+      },
+      message: 'The password must contain only letters (lowercase and uppercase) and digits.'
+    },
   },
-  password: {
+  password:{
     type: String,
-    required: true,
-  },
-  profile_picture: {
-    type: Number
-  },
+    validate: {
+      validator: function(value) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/;
+        return regex.test(value);
+      },
+      message: 'The Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+    },
+    required: true
+    },
+  
   Business_name: {
     type: String,
     required: true
@@ -63,21 +75,34 @@ const VendorSchema = new mongoose.Schema({
   Business_address: {
     type: String,
     required: true
+  },
+  profile_picture:{
+    type: Buffer, // Use the Buffer type to store binary data
+    required: true
   }
 
-});
 
+
+
+});
 
 const CustomerSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    index: { unique: true }
   },
-  password: {
+  password:{
     type: String,
+    validate: {
+      validator: function(value) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/;
+        return regex.test(value);
+      },
+      message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+    },
     required: true
-  },
+    },
   profile_picture: {
     type: Number
   },
@@ -96,12 +121,19 @@ const ShipperSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    index: { unique: true }
   },
-  password: {
+  password:{
     type: String,
+    validate: {
+      validator: function(value) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/;
+        return regex.test(value);
+      },
+      message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+    },
     required: true
-  },
+    },
   profile_picture: {
     type: Number
   },
@@ -148,6 +180,7 @@ const Shipper = mongoose.model('Shipper', ShipperSchema);
 const Product = mongoose.model('Product', ProductSchema);
 
 app.use(express.urlencoded({ extended: true }));
+
 
 
 // Show the home page
@@ -222,10 +255,17 @@ app.post('/product', (req, res) => {
 });
 
 // Showing secret page
-app.get("/secret", isLoggedIn, function(req, res) {
-  res.render("secret");
+app.get("/register", isLoggedIn, function(req, res) {
+  es.render("set-up-account");
 });
-
+// Handling user signup
+app.post("/register", async (req, res) => {
+  const user = await User.create({
+    username: req.body.username,
+    password: req.body.password
+  });
+  return res.render('set-up-account')
+});
 //Showing login form
 app.get("/login", function (req, res) {
   res.render("login");
@@ -240,7 +280,7 @@ app.post("/login", async function(req, res){
         //check if password matches
         const result = req.body.password === user.password;
         if (result) {
-          res.render("secret");
+          res.render("my-account");
         } else {
           res.status(400).json({ error: "password doesn't match" });
         }
@@ -260,13 +300,10 @@ app.get("/logout", function (req, res) {
     });
 });
 
-
-
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect("/login");
 }
-
 
 
 
