@@ -1,11 +1,38 @@
 <%- include('partials/header.ejs') %>
 
-<form action="/register" method="POST">
-	<input type="text" name="username"
-		placeholder="username">
-	<input type="password" name="password"
-		placeholder="password">
-	<button>Submit</button>
-</form>
+<main>
+    <div class="container px-4 py-5" id="featured-3">
+        <h2 class="pb-2 border-bottom">Account type</h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+          <div class="feature col">
+            
+            <h3 class="fs-2 text-body-emphasis">Customer</h3>
+            <p>Customers: who buy products from vendors</p>
+            <a href="/customer-new" class="icon-link">
+                Create a Customer account
+              <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+            </a>
+          </div>
+          <div class="feature col">
+            
+            <h3 class="fs-2 text-body-emphasis">Vendor</h3>
+            <p>Vendors: who sell products to customers.</p>
+            <a href="/vendor-new" class="icon-link">
+                Create a Vendor account
+              <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+            </a>
+          </div>
+          <div class="feature col">
+            
+            <h3 class="fs-2 text-body-emphasis">Shipper</h3>
+            <p>Shippers: who ship products from distribution hubs to customers.</p>
+            <a href="shipper-new" class="icon-link">
+              Create a Shipper account
+              <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+</main>
 
 <%- include('partials/footer.ejs') %>
