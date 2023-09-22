@@ -10,26 +10,25 @@ Author: Group 21
 
 <main class="d-flex justify-content-center">
   <div class="col-8">
-  <h1>Create Account</h1>
-  <form action="/shipper" method="POST">
-    <label for="username">User name:</label>
-    <input type="text" name="username" class="form-control"  placeholder="Username" required><br>
+    <h1>Create Account</h1>
+    <form action="/shipper" method="POST">
+      <label for="username">User name:</label>
+      <input type="text" name="username" class="form-control" placeholder="Username" required><br>
 
-    <label for="password">Password</label>
-    <input type="text" name="password" class="form-control"  placeholder="Password" required><br>
+      <label for="password">Password</label>
+      <input type="password" name="password" class="form-control" placeholder="Password" required><br>
 
-    <label for="assigned_distribution_hub">Assigned distribution hub</label>
-    <select name="assigned_distribution_hub">
-      <option value="Hanoi">Hanoi</option>
-      <option value="Danang">Da nang</option>
-      <option value="HoChiMinh">Ho chi Minh</option>
-    </select>
-    <br>
-   
-    <input class="btn btn-success w-100 py-2 mt-5" type="submit" value="Create">
-  </form>
+      <label for="assigned_distribution_hub">Assigned distribution hub</label>
+      <select name="assigned_distribution_hub">
+        <option value="Hanoi">Hanoi</option>
+        <option value="Danang">Da nang</option>
+        <option value="HoChiMinh">Ho chi Minh</option>
+      </select>
+      <br>
+
+      <input class="btn btn-success w-100 py-2 mt-5" type="submit" value="Create">
+    </form>
   </div>
 </main>
 
 <%- include('partials/footer.ejs') %>
-

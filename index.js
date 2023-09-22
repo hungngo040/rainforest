@@ -163,7 +163,7 @@ const ProductSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    maxLength: 500,
+    maxlength: 500,
   },
   category: {
     enum: ['Smartphone','Laptop','Acessories']
@@ -185,8 +185,25 @@ app.use(express.urlencoded({ extended: true }));
 
 // Show the home page
 app.get('/', (req, res) => {
-  res.render('index');
+  Product.find()
+    .then((products) => {
+        res.render('index', {products: products});
+    })
+    .catch((error) => console.log(error.message));
 });
+
+app.get('/view-product/:id', (req, res) => {
+  Product.findById(req.params.id)
+  .then((product) => {
+    if (!product) {
+      return res.send("Cannot found that ID!");
+    }
+    res.render('view-product', {product: product});
+  })
+  .catch((error) => res.send(error));
+});
+
+
 
 app.get('/register', (req, res) => {
   res.render('register');
@@ -254,6 +271,7 @@ app.post('/product', (req, res) => {
     .catch(error => res.send(error));
 });
 
+<<<<<<< HEAD
 // Showing secret page
 app.get("/register", isLoggedIn, function(req, res) {
   es.render("set-up-account");
@@ -309,6 +327,18 @@ function isLoggedIn(req, res, next) {
 
 
 
+=======
+// Shipper page
+app.get('/shipper', (req, res) => {
+  res.render('shipper')
+});
+
+// Shipper order detail page
+app.get('/shipper-order-detail', (req, res) => {
+  res.render('shipper-order-detail')
+});
+
+>>>>>>> a3e55837edf6b52e2825f433b9cb4c583e1f742d
 app.listen(port, function () {
   console.log(`Server started on: http://localhost:${port}`);
 });
