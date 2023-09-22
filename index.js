@@ -13,7 +13,7 @@ const passwordValidator = require('password-validator');
 const port = 3000;
 
 app.set('view engine', 'ejs');
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.net/rainforestDB?retryWrites=true&w=majority&appName=AtlasApp')
@@ -143,6 +143,33 @@ app.get('/', (req, res) => {
     })
     .catch((error) => console.log(error.message));
 });
+
+app.get('/filtered', (req, res) => {
+  const { min, max } = req.query;
+  
+  Product.find({price: {$gt: min, $lt: max}})
+  .then((products) => {
+    if (!products) {
+      return res.send("Cannot found that product!");
+    }
+    res.render('index', {products: products});
+  })
+  .catch((error) => res.send(error));
+});
+
+app.get('/search', (req, res) => {
+  const { search } = req.query;
+  
+  Product.find({name: search})
+  .then((products) => {
+    if (!products) {
+      return res.send("Cannot found that product!");
+    }
+    res.render('index', {products: products});
+  })
+  .catch((error) => res.send(error));
+});
+
 
 app.get('/view-product/:id', (req, res) => {
   Product.findById(req.params.id)
