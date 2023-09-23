@@ -17,7 +17,9 @@ const ShipperSchema = new mongoose.Schema({
         },
         message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
-      required: true
+      required: true,
+        minlength:8,
+      maxlength:20
       },
     profile_picture: {
       type: Number
