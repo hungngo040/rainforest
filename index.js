@@ -18,6 +18,10 @@ const port = 3000;
 const Vendor = require('./model/Vendor');
 const Shipper = require('./model/Shipper');
 const Customer = require('./model/Customer');
+
+const fs = require('fs');
+require('dotenv').config();
+const multer = require('multer');
 app.set('view engine', 'ejs');
 
 
@@ -28,7 +32,8 @@ app.use(express.static('public'));
 
 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(require("express-session")({
   secret: "Rusty is a dog",
   resave: false,
@@ -60,10 +65,7 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  image: {
-    data: Buffer,
-    contentType: String,
-  },
+ 
   description: {
     type: String,
     required: true,
@@ -74,16 +76,15 @@ const ProductSchema = new mongoose.Schema({
   }
 });
 
+
+
 // Define a model based on the schema
-
-
-
 
 const Product = mongoose.model('Product', ProductSchema);
 
 app.use(express.urlencoded({ extended: true }));
 
-
+//ROUTES
 
 // Show the home page
 app.get('/', (req, res) => {
@@ -221,15 +222,15 @@ app.post("/login", async function(req, res){
       const customer = await Customer.findOne({ username: req.body.username });
       if (vendor) {
         //check if password matches
-        const result = req.body.password === vendor.password;
+        const result = await vendor.comparePassword(req.body.password)
         if (result) {
           res.render("vendor");
         } else {
-          res.status(400).json({ error: "password doesn't match" });
-        }}
+            res.status(400).json({ error: "password doesn't match" });
+          }}
       if (shipper) {
         //check if password matches
-        const result = req.body.password === shipper.password;
+        const result = await shipper.comparePassword(req.body.password)
         if (result) {
           res.render("shipper");
         } else {
@@ -237,7 +238,7 @@ app.post("/login", async function(req, res){
         }}
       if (customer) {
         //check if password matches
-        const result = req.body.password === customer.password;
+        const result = await customer.comparePassword(req.body.password)
         if (result) {
           res.render("customer");
       } else {
@@ -272,6 +273,8 @@ app.get('/shipper', (req, res) => {
 app.get('/shipper-order-detail', (req, res) => {
   res.render('shipper-order-detail')
 });
+
+
 
 app.listen(port, function () {
   console.log(`Server started on: http://localhost:${port}`);
