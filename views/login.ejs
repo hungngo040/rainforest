@@ -7,12 +7,17 @@ Author: Group 21
 -->
 <%- include('partials/header.ejs') %>
   
-<form action="/login" method="POST">
-    <input type="text" name="username"
-        placeholder="username">
-    <input type="password" name="password" 
-        placeholder="password">
-    <button>login</button>
-</form>
+<main class="d-flex justify-content-center">
+    <div width="280px">
+        <form action="/login" method="POST">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            
+            <input type="text" class="form-control" name="username" placeholder="username">
+            <input type="password" name="password" class="form-control" placeholder="password">
+            <button class="btn btn-success w-100 py-2">login</button>
+        </form>
+    </div>
+  </main>
   
 <%- include('partials/footer.ejs') %>
+
