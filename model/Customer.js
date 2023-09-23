@@ -18,7 +18,11 @@ const CustomerSchema = new mongoose.Schema({
         message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
       required: true,
+<<<<<<< HEAD
       minlength:8,
+=======
+        minlength:8,
+>>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
       maxlength:20
       },
     name: {
@@ -56,7 +60,11 @@ CustomerSchema.methods.comparePassword = async function (password) {
 
 
 CustomerSchema.plugin(passportLocalMongoose);
+<<<<<<< HEAD
 
 
 
+=======
+  
+>>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
 module.exports = mongoose.model('Customer', CustomerSchema)

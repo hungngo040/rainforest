@@ -17,7 +17,11 @@ const ShipperSchema = new mongoose.Schema({
         message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
       required: true,
+<<<<<<< HEAD
       minlength:8,
+=======
+        minlength:8,
+>>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
       maxlength:20
       },
   
@@ -32,6 +36,7 @@ ShipperSchema.pre('save', function (next) {
       bcrypt.hash(this.password, 8, (err, hash) => {
         if (err) return next(err);
   
+<<<<<<< HEAD
         this.password = hash;
         next();
       });
@@ -54,3 +59,6 @@ ShipperSchema.pre('save', function (next) {
 
 
 module.exports = mongoose.model('Shipper', ShipperSchema)
+=======
+module.exports = mongoose.model('Shipper', ShipperSchema)
+>>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
