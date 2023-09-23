@@ -3,37 +3,33 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const bcrypt = require('bcrypt')
 
 const CustomerSchema = new mongoose.Schema({
-    username: {
-      type: String,
-      required: true,
-      index: { unique: true }
-    },
-    password:{
-      type: String,
-      validate: {
-        validator: function(value) {
-          const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/;
-          return regex.test(value);
-        },
-        message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+  username: {
+    type: String,
+    required: true,
+    index: { unique: true }
+  },
+  password: {
+    type: String,
+    validate: {
+      validator: function (value) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/;
+        return regex.test(value);
       },
-      required: true,
-<<<<<<< HEAD
-      minlength:8,
-=======
-        minlength:8,
->>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
-      maxlength:20
-      },
-    name: {
-      type: String,
-      required: true
+      message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
     },
-    address: {
-      type: String,
-      required: true
-    }
-  
+    required: true,
+    minlength: 8,
+    maxlength: 20
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  }
+
 });
 
 CustomerSchema.pre('save', function (next) {
@@ -60,11 +56,7 @@ CustomerSchema.methods.comparePassword = async function (password) {
 
 
 CustomerSchema.plugin(passportLocalMongoose);
-<<<<<<< HEAD
 
 
 
-=======
-  
->>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
 module.exports = mongoose.model('Customer', CustomerSchema)
