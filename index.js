@@ -26,6 +26,11 @@ app.set('view engine', 'ejs');
 
 
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
@@ -71,16 +76,15 @@ const ProductSchema = new mongoose.Schema({
   }
 });
 
+
+
 // Define a model based on the schema
-
-
-
 
 const Product = mongoose.model('Product', ProductSchema);
 
 app.use(express.urlencoded({ extended: true }));
 
-
+//ROUTES
 
 // Show the home page
 app.get('/', (req, res) => {
@@ -90,6 +94,33 @@ app.get('/', (req, res) => {
     })
     .catch((error) => console.log(error.message));
 });
+
+app.get('/filtered', (req, res) => {
+  const { min, max } = req.query;
+  
+  Product.find({price: {$gt: min, $lt: max}})
+  .then((products) => {
+    if (!products) {
+      return res.send("Cannot found that product!");
+    }
+    res.render('index', {products: products});
+  })
+  .catch((error) => res.send(error));
+});
+
+app.get('/search', (req, res) => {
+  const { search } = req.query;
+  
+  Product.find({name: search})
+  .then((products) => {
+    if (!products) {
+      return res.send("Cannot found that product!");
+    }
+    res.render('index', {products: products});
+  })
+  .catch((error) => res.send(error));
+});
+
 
 app.get('/view-product/:id', (req, res) => {
   Product.findById(req.params.id)
@@ -191,15 +222,15 @@ app.post("/login", async function(req, res){
       const customer = await Customer.findOne({ username: req.body.username });
       if (vendor) {
         //check if password matches
-        const result = req.body.password === vendor.password;
+        const result = await vendor.comparePassword(req.body.password)
         if (result) {
           res.render("vendor");
         } else {
-          res.status(400).json({ error: "password doesn't match" });
-        }}
+            res.status(400).json({ error: "password doesn't match" });
+          }}
       if (shipper) {
         //check if password matches
-        const result = req.body.password === shipper.password;
+        const result = await shipper.comparePassword(req.body.password)
         if (result) {
           res.render("shipper");
         } else {
@@ -207,7 +238,7 @@ app.post("/login", async function(req, res){
         }}
       if (customer) {
         //check if password matches
-        const result = req.body.password === customer.password;
+        const result = await customer.comparePassword(req.body.password)
         if (result) {
           res.render("customer");
       } else {
