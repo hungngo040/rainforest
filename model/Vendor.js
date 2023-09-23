@@ -1,6 +1,5 @@
-
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 const passportLocalMongoose = require('passport-local-mongoose');
 const VendorSchema = new mongoose.Schema({
     username: {
@@ -25,8 +24,14 @@ const VendorSchema = new mongoose.Schema({
         },
         message: 'The Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
-      required: true
+      required: true,
+      minlength:8,
+      maxlength:20
       },
+    profile_picture:{
+      data: Buffer,
+      contentType: String
+    },
     
     Business_name: {
       type: String,
@@ -36,13 +41,12 @@ const VendorSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    profile_picture:{
-      type: Buffer, // Use the Buffer type to store binary data
-      required: true
-    }
+   
   
 });
   
 VendorSchema.plugin(passportLocalMongoose);
-  
+
+
+
 module.exports = mongoose.model('Vendor', VendorSchema)

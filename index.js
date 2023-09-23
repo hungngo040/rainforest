@@ -18,12 +18,17 @@ const port = 3000;
 const Vendor = require('./model/Vendor');
 const Shipper = require('./model/Shipper');
 const Customer = require('./model/Customer');
+
+const fs = require('fs');
+require('dotenv').config();
+const multer = require('multer');
 app.set('view engine', 'ejs');
 
 
 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(require("express-session")({
   secret: "Rusty is a dog",
   resave: false,
@@ -55,10 +60,7 @@ const ProductSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  image: {
-    data: Buffer,
-    contentType: String,
-  },
+ 
   description: {
     type: String,
     required: true,
@@ -240,6 +242,8 @@ app.get('/shipper', (req, res) => {
 app.get('/shipper-order-detail', (req, res) => {
   res.render('shipper-order-detail')
 });
+
+
 
 app.listen(port, function () {
   console.log(`Server started on: http://localhost:${port}`);
