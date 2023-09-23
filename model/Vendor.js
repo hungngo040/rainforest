@@ -25,7 +25,9 @@ const VendorSchema = new mongoose.Schema({
         },
         message: 'The Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
-      required: true
+      required: true,
+        minlength:8,
+      maxlength:20
       },
     
     Business_name: {
