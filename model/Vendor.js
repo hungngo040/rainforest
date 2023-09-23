@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose');
+// create schema
 const VendorSchema = new mongoose.Schema({
     username: {
       type: String,
@@ -25,11 +26,7 @@ const VendorSchema = new mongoose.Schema({
         message: 'The Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
       required: true,
-<<<<<<< HEAD
       minlength:8,
-=======
-        minlength:8,
->>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
       maxlength:20
       },
     profile_picture:{
@@ -48,6 +45,9 @@ const VendorSchema = new mongoose.Schema({
    
   
 });
+
+
+// hash the password
 VendorSchema.pre('save', function (next) {
   if (this.isModified('password')) {
     bcrypt.hash(this.password, 8, (err, hash) => {
@@ -58,7 +58,7 @@ VendorSchema.pre('save', function (next) {
     });
   }
 });
-
+// Compare the password
 VendorSchema.methods.comparePassword = async function (password) {
   if (!password) throw new Error('Password is mission, can not compare!');
 
@@ -73,12 +73,5 @@ VendorSchema.methods.comparePassword = async function (password) {
 
 
 VendorSchema.plugin(passportLocalMongoose);
-<<<<<<< HEAD
-
-
-
 module.exports = mongoose.model('Vendor', VendorSchema)
-=======
-  
-module.exports = mongoose.model('Vendor', VendorSchema)
->>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
+

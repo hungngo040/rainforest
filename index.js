@@ -18,7 +18,6 @@ const port = 3000;
 const Vendor = require('./model/Vendor');
 const Shipper = require('./model/Shipper');
 const Customer = require('./model/Customer');
-
 const fs = require('fs');
 require('dotenv').config();
 const multer = require('multer');
@@ -83,6 +82,9 @@ const ProductSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', ProductSchema);
 
 app.use(express.urlencoded({ extended: true }));
+
+
+
 
 //ROUTES
 
@@ -174,7 +176,7 @@ app.get('/shipper-new', (req, res) => {
 });
 
 // create new customer account
-app.post('/shipper', (req, res) => {
+app.post('/shipper',(req, res,) => {
   console.log(req.body);
   const shipper = new Shipper(req.body);
   shipper.save()
@@ -273,6 +275,7 @@ app.get('/shipper', (req, res) => {
 app.get('/shipper-order-detail', (req, res) => {
   res.render('shipper-order-detail')
 });
+
 
 
 
