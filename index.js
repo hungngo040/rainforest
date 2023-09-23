@@ -36,13 +36,13 @@ app.use(require("express-session")({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-  
+
 passport.use(new LocalStrategy(Vendor.authenticate()));
 passport.serializeUser(Vendor.serializeUser());
 passport.deserializeUser(Vendor.deserializeUser());
-  
 
-  
+
+
 mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.net/rainforestDB?retryWrites=true&w=majority&appName=AtlasApp')
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.log(error.message));
@@ -70,7 +70,8 @@ const ProductSchema = new mongoose.Schema({
     maxlength: 500,
   },
   category: {
-    enum: ['Smartphone','Laptop','Acessories']
+    type: String,
+    enum: ['Smartphone', 'Laptop', 'Acessories']
   }
 });
 
@@ -89,47 +90,47 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   Product.find()
     .then((products) => {
-        res.render('index', {products: products});
+      res.render('index', { products: products });
     })
     .catch((error) => console.log(error.message));
 });
 
 app.get('/filtered', (req, res) => {
   const { min, max } = req.query;
-  
-  Product.find({price: {$gt: min, $lt: max}})
-  .then((products) => {
-    if (!products) {
-      return res.send("Cannot found that product!");
-    }
-    res.render('index', {products: products});
-  })
-  .catch((error) => res.send(error));
+
+  Product.find({ price: { $gt: min, $lt: max } })
+    .then((products) => {
+      if (!products) {
+        return res.send("Cannot found that product!");
+      }
+      res.render('index', { products: products });
+    })
+    .catch((error) => res.send(error));
 });
 
 app.get('/search', (req, res) => {
   const { search } = req.query;
-  
-  Product.find({name: search})
-  .then((products) => {
-    if (!products) {
-      return res.send("Cannot found that product!");
-    }
-    res.render('index', {products: products});
-  })
-  .catch((error) => res.send(error));
+
+  Product.find({ name: search })
+    .then((products) => {
+      if (!products) {
+        return res.send("Cannot found that product!");
+      }
+      res.render('index', { products: products });
+    })
+    .catch((error) => res.send(error));
 });
 
 
 app.get('/view-product/:id', (req, res) => {
   Product.findById(req.params.id)
-  .then((product) => {
-    if (!product) {
-      return res.send("Cannot found that ID!");
-    }
-    res.render('view-product', {product: product});
-  })
-  .catch((error) => res.send(error));
+    .then((product) => {
+      if (!product) {
+        return res.send("Cannot found that ID!");
+      }
+      res.render('view-product', { product: product });
+    })
+    .catch((error) => res.send(error));
 });
 
 
@@ -201,7 +202,7 @@ app.post('/product', (req, res) => {
 });
 
 // Showing secret page
-app.get("/register", isLoggedIn, function(req, res) {
+app.get("/register", isLoggedIn, function (req, res) {
   es.render("set-up-account");
 });
 
@@ -213,50 +214,52 @@ app.get("/login", function (req, res) {
 //Handling user login
 
 
-app.post("/login", async function(req, res){
+app.post("/login", async function (req, res) {
   try {
-      // check if the user exists
-      const vendor = await Vendor.findOne({ username: req.body.username });
-      const shipper = await Shipper.findOne({ username: req.body.username });
-      const customer = await Customer.findOne({ username: req.body.username });
-      if (vendor) {
-        //check if password matches
-        const result = req.body.password === vendor.password;
-        if (result) {
-          res.render("vendor");
-        } else {
-          res.status(400).json({ error: "password doesn't match" });
-        }}
-      if (shipper) {
-        //check if password matches
-        const result = req.body.password === shipper.password;
-        if (result) {
-          res.render("shipper");
-        } else {
-        res.status(400).json({ error: "password doesn't match" });
-        }}
-      if (customer) {
-        //check if password matches
-        const result = req.body.password === customer.password;
-        if (result) {
-          res.render("customer");
+    // check if the user exists
+    const vendor = await Vendor.findOne({ username: req.body.username });
+    const shipper = await Shipper.findOne({ username: req.body.username });
+    const customer = await Customer.findOne({ username: req.body.username });
+    if (vendor) {
+      //check if password matches
+      const result = req.body.password === vendor.password;
+      if (result) {
+        res.render("vendor");
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
-      } else {
-        res.status(400).json({ error: "User doesn't exist" });
-      }
-    } catch (error) {
-      res.status(400).json({ error });
     }
+    if (shipper) {
+      //check if password matches
+      const result = req.body.password === shipper.password;
+      if (result) {
+        res.render("shipper");
+      } else {
+        res.status(400).json({ error: "password doesn't match" });
+      }
+    }
+    if (customer) {
+      //check if password matches
+      const result = req.body.password === customer.password;
+      if (result) {
+        res.render("customer");
+      } else {
+        res.status(400).json({ error: "password doesn't match" });
+      }
+    } else {
+      res.status(400).json({ error: "User doesn't exist" });
+    }
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 });
 
 //Handling user logout 
 app.get("/logout", function (req, res) {
-  req.logout(function(err) {
-      if (err) { return next(err); }
-      res.redirect('/');
-    });
+  req.logout(function (err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
 });
 
 function isLoggedIn(req, res, next) {

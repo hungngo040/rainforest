@@ -25,6 +25,7 @@
           <input type="text" name="name" id="product-name" class="form-control w-100" required>
         </div>
       </div>
+
       <div class="row my-3">
         <div class="col-lg-6 col-md-12 my-1">
           <label for="price">Price</label>
@@ -33,6 +34,20 @@
           <input type="number" name="price" id="product-price" class="form-control w-100" required>
         </div>
       </div>
+
+      <div class="row my-3">
+        <div class="col-lg-6 col-md-12 my-1">
+          <label for="price">Category</label>
+        </div>
+        <div class="col-lg-6 col-md-12 my-1">
+          <select name="category" autocomplete="off" id="product-category" class="form-select w-100" required>
+            <option value="Smartphone">Smartphone</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+        </div>
+      </div>
+
       <div class="row my-3">
         <div class="col-lg-6 col-md-12 my-1">
           <label for="product-image">Image</label>
@@ -41,6 +56,7 @@
           <input type="file" name="image" id="product-image" class="form-control w-100">
         </div>
       </div>
+
       <div class="row my-3">
         <div class="col-lg-6 col-md-12 my-1">
           <label for="description">Product Description</label>
