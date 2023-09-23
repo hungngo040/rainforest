@@ -1,6 +1,5 @@
-
+const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 const passportLocalMongoose = require('passport-local-mongoose');
 const VendorSchema = new mongoose.Schema({
     username: {
@@ -26,9 +25,17 @@ const VendorSchema = new mongoose.Schema({
         message: 'The Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       },
       required: true,
+<<<<<<< HEAD
+      minlength:8,
+=======
         minlength:8,
+>>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
       maxlength:20
       },
+    profile_picture:{
+      data: Buffer,
+      contentType: String
+    },
     
     Business_name: {
       type: String,
@@ -38,13 +45,40 @@ const VendorSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    profile_picture:{
-      type: Buffer, // Use the Buffer type to store binary data
-      required: true
-    }
+   
   
 });
-  
+VendorSchema.pre('save', function (next) {
+  if (this.isModified('password')) {
+    bcrypt.hash(this.password, 8, (err, hash) => {
+      if (err) return next(err);
+
+      this.password = hash;
+      next();
+    });
+  }
+});
+
+VendorSchema.methods.comparePassword = async function (password) {
+  if (!password) throw new Error('Password is mission, can not compare!');
+
+  try {
+    const result = await bcrypt.compare(password, this.password);
+    return result;
+  } catch (error) {
+    console.log('Error while comparing password!', error.message);
+  }
+};
+
+
+
 VendorSchema.plugin(passportLocalMongoose);
+<<<<<<< HEAD
+
+
+
+module.exports = mongoose.model('Vendor', VendorSchema)
+=======
   
 module.exports = mongoose.model('Vendor', VendorSchema)
+>>>>>>> 424187cbd4ee8636ebb30b591569984a5f5a0ae0
