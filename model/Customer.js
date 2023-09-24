@@ -48,7 +48,12 @@ const CustomerSchema = new mongoose.Schema({
   address: {
     type: String,
     required: true
-  }
+  },
+  profile_picture: {
+    data: Buffer,
+    contentType: String
+  },
+
 
 });
 // hash the password

@@ -18,6 +18,9 @@ Author: Group 21
       <label for="password">Password: (Must contains at least one upper case letter, at least one lower case letter, at least one digit, at least one special letter in the set !@#$%^&*)</label>
       <input type="password" name="password" class="form-control" placeholder="Password" required><br>
 
+      <label for="profile_picture">Upload Profile picture</label>
+      <input type="file" id="image" name="image" value="profile_picture" required />
+
       <label for="assigned_distribution_hub">Assigned distribution hub</label>
       <select name="assigned_distribution_hub">
         <option value="Hanoi">Hanoi</option>
@@ -25,7 +28,9 @@ Author: Group 21
         <option value="HoChiMinh">Ho chi Minh</option>
       </select>
       <br>
-
+      
+     
+      
       <input class="btn btn-success w-100 py-2 mt-5" type="submit" value="Create">
     </form>
   </div>

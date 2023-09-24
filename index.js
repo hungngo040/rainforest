@@ -29,6 +29,7 @@ require('dotenv').config();
 const multer = require('multer');
 app.set('view engine', 'ejs');
 
+
 const session = require('express-session');
 
 
@@ -51,6 +52,19 @@ app.use(passport.session());
 passport.use(new LocalStrategy(Vendor.authenticate()));
 passport.serializeUser(Vendor.serializeUser());
 passport.deserializeUser(Vendor.deserializeUser());
+
+
+
+// save image on mongoDb Atlas
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+const upload = multer({ storage: storage });
 
 
 
@@ -135,6 +149,7 @@ app.get('/customer-new', (req, res) => {
   res.render('create-customer-account')
 });
 
+
 // create new customer account
 app.post('/customer', (req, res) => {
   console.log(req.body);
@@ -180,7 +195,7 @@ app.post('/product', (req, res) => {
 
 // Showing secret page
 app.get("/register", isLoggedIn, function (req, res) {
-  es.render("set-up-account");
+  res.render("set-up-account");
 });
 
 //Showing login form
@@ -200,7 +215,7 @@ app.post("/login", async function (req, res) {
       //check if password matches
       const result = await vendor.comparePassword(req.body.password)
       if (result) {
-        res.render("vendor");
+        res.render('vendor');
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
@@ -218,7 +233,7 @@ app.post("/login", async function (req, res) {
       //check if password matches
       const result = await customer.comparePassword(req.body.password)
       if (result) {
-        res.render("customer");
+        res.render('customer');
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
@@ -254,15 +269,7 @@ app.get('/shipper-order-detail', (req, res) => {
 });
 
 
-// save image on mongoDb Atlas
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'uploads')
-  },
-  filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now())
-  }
-});
+
 
 
 
