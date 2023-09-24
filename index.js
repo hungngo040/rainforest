@@ -97,7 +97,7 @@ app.get('/', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
 });
 
 // Filter product
-app.get('/filtered', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, res) => {
+app.get('/filtered', (req, res) => {
   const { min, max } = req.query;
 
   Product.find({ price: { $gt: min, $lt: max } })
@@ -110,7 +110,7 @@ app.get('/filtered', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req,
     .catch((error) => res.send(error));
 });
 // Search product
-app.get('/search', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, res) => {
+app.get('/search', (req, res) => {
   const { search } = req.query;
 
   Product.find({ name: search })
@@ -124,7 +124,7 @@ app.get('/search', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, r
 });
 
 // view product
-app.get('/view-product/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+app.get('/view-product/:id', (req, res) => {
   Product.findById(req.params.id)
     .then((product) => {
       if (!product) {
