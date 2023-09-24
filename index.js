@@ -19,11 +19,17 @@ const Vendor = require('./model/Vendor');
 const Shipper = require('./model/Shipper');
 const Customer = require('./model/Customer');
 const Product = require('./model/Product');
+
+const Cart = require('./model/Cart');
+const Order = require('./model/Order');
+
+
 const fs = require('fs');
 require('dotenv').config();
 const multer = require('multer');
 app.set('view engine', 'ejs');
 
+const session = require('express-session');
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -34,7 +40,7 @@ app.use(express.static('public'));
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
-app.use(require("express-session")({
+app.use(session({
   secret: "Rusty is a dog",
   resave: false,
   saveUninitialized: false
@@ -51,6 +57,7 @@ passport.deserializeUser(Vendor.deserializeUser());
 mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.net/rainforestDB?retryWrites=true&w=majority&appName=AtlasApp')
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((error) => console.log(error.message));
+
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -84,7 +91,7 @@ app.get('/search', (req, res) => {
   Product.find({ name: search })
     .then((products) => {
       if (!products) {
-        return res.send("Cannot found that product!");
+        return res.send("Sorry, we could not find that product!");
       }
       res.render('index', { products: products });
     })
@@ -246,6 +253,7 @@ app.get('/shipper-order-detail', (req, res) => {
   res.render('shipper-order-detail')
 });
 
+
 // save image on mongoDb Atlas
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -258,6 +266,17 @@ const storage = multer.diskStorage({
 
 
 
+// Cart page
+app.get('/cart', (req, res) => {
+  res.render('cart')
+});
+
+
+
+// 404 page
+app.get('*', (req, res) => {
+  res.send('404! This page does not exist')
+});
 
 app.listen(port, function () {
   console.log(`Server started on: http://localhost:${port}`);

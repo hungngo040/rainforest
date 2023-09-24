@@ -30,7 +30,7 @@ const ShipperSchema = new mongoose.Schema({
 
   assigned_distribution_hub: {
     type: String,
-    enum: ['Hanoi', 'Danang', 'HoChiMinh']
+    enum: ['Hanoi', 'Da Nang', 'Ho Chi Minh']
   }
 
 });
