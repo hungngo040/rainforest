@@ -5,6 +5,31 @@ Semester: 2023B
 Assessment: Assignment 3
 Author: Group 21
 -->
-<%- include('partials/logged-in-header') %>
+<%- include('partials/header.ejs') %>
+
+<main>
+    <div class="container px-4 py-5" id="featured-3">
+        <h2 class="pb-2 border-bottom">My account</h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+          <div class="feature col">
+            
+            <h3 class="fs-2 text-body-emphasis">Add product</h3>
+            <a href="/vendor-add-products" class="icon-link">
+                Add my product
+              <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+            </a>
+          </div>
+          <div class="feature col">
+            
+            <h3 class="fs-2 text-body-emphasis">View product</h3>
+            <a href="/vendor-view-products" class="icon-link">
+                View my product
+              <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+            </a>
+          </div>
+          
+        </div>
+      </div>
+</main>
 
 <%- include('partials/footer.ejs') %>
