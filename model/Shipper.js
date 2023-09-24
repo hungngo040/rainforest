@@ -50,7 +50,7 @@ ShipperSchema.pre('save', function (next) {
   }
 });
 ShipperSchema.methods.comparePassword = async function (password) {
-  if (!password) throw new Error('Password is mission, can not compare!');
+  if (!password) throw new Error('Password is missing, can not compare!');
 
   try {
     const result = await bcrypt.compare(password, this.password);

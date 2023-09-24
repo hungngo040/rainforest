@@ -162,30 +162,20 @@ app.get('/customer-new', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
 
 
 // create new customer account
-app.post('/create-customer-account', (req, res) => {
+app.post('/customer', (req, res) => {
   console.log(req.body);
   const customer = new Customer(req.body);
   customer.save()
-    .then(() => {
-      Product.find({}, (err, products) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.render('customer', { products: products })
-        }
-      })
-    })
+    .then(Product.find().then((products) => {
+      res.render('customer', { products: products });
+    })).catch(error => res.send(error))
 });
 
 // customer page
 app.get('/customer', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, res) => {
-  Product.find({}, (err, products) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('customer', { products: products });
-    }
-  });
+  Product.find().then((products) => {
+    res.render('customer', { products: products });
+  }).catch(error => res.send(error))
 });
 
 // Show create shipper account form
