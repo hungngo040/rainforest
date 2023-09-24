@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const LocalStrategy = require("passport-local");
 const passport = require('passport');
 const passportLocalMongoose = require("passport-local-mongoose");
+const connectEnsureLogin = require('connect-ensure-login');
 const bcrypt = require('bcrypt');
 const port = 3000;
 const Vendor = require('./model/Vendor');
@@ -32,6 +33,7 @@ app.set('view engine', 'ejs');
 
 
 const session = require('express-session');
+const { connect } = require('http2');
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -50,19 +52,30 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(Vendor.authenticate()));
+passport.use('vendorLocal', new LocalStrategy(Vendor.authenticate()));
 passport.serializeUser(Vendor.serializeUser());
 passport.deserializeUser(Vendor.deserializeUser());
 
 
+passport.use('customerLocal', new LocalStrategy(Customer.authenticate()));
+passport.serializeUser(Customer.serializeUser());
+passport.deserializeUser(Customer.deserializeUser());
 
+passport.use('shipperLocal', new LocalStrategy(Shipper.authenticate()));
+passport.serializeUser(Shipper.serializeUser());
+passport.deserializeUser(Shipper.deserializeUser());
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 // save image on mongoDb Atlas
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, 'uploads')
+    cb(null, 'uploads')
   },
   filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now())
+    cb(null, file.fieldname + '-' + Date.now())
   }
 });
 const upload = multer({ storage: storage });
@@ -79,15 +92,12 @@ app.use(express.urlencoded({ extended: true }));
 //ROUTES
 
 // Show the home page
-app.get('/', (req, res) => {
-  Product.find()
-    .then((products) => {
-      res.render('index', { products: products });
-    })
-    .catch((error) => console.log(error.message));
+app.get('/', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
+  res.render('index');
 });
+
 // Filter product
-app.get('/filtered', (req, res) => {
+app.get('/filtered', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, res) => {
   const { min, max } = req.query;
 
   Product.find({ price: { $gt: min, $lt: max } })
@@ -95,12 +105,12 @@ app.get('/filtered', (req, res) => {
       if (!products) {
         return res.send("Cannot found that product!");
       }
-      res.render('index', { products: products });
+      res.render('customer', { products: products });
     })
     .catch((error) => res.send(error));
 });
 // Search product
-app.get('/search', (req, res) => {
+app.get('/search', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, res) => {
   const { search } = req.query;
 
   Product.find({ name: search })
@@ -114,7 +124,7 @@ app.get('/search', (req, res) => {
 });
 
 // view product
-app.get('/view-product/:id', (req, res) => {
+app.get('/view-product/:id', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   Product.findById(req.params.id)
     .then((product) => {
       if (!product) {
@@ -127,39 +137,56 @@ app.get('/view-product/:id', (req, res) => {
 
 
 
-app.get('/register', (req, res) => {
+app.get('/register', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
   res.render('register');
 })
 
 // Show create  vendor account form
-app.get('/vendor-new', (req, res) => {
+app.get('/vendor-new', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
   res.render('create-vendor-account')
 });
 
 // create new vendor account
-app.post('/vendor', (req, res) => {
+app.post('/vendor-new', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
   console.log(req.body);
   const vendor = new Vendor(req.body);
   vendor.save()
-    .then(() => res.render('create-account-successful'))
+    .then(() => res.render('vendor'))
     .catch(error => res.send(error));
 });
 
 // Show create custoner account form
-app.get('/customer-new', (req, res) => {
+app.get('/customer-new', connectEnsureLogin.ensureLoggedOut(), (req, res) => {
   res.render('create-customer-account')
 });
 
 
 // create new customer account
-app.post('/customer', (req, res) => {
+app.post('/create-customer-account', (req, res) => {
   console.log(req.body);
   const customer = new Customer(req.body);
   customer.save()
-    .then(() => res.render('create-account-successful'))
-    .catch(error => res.send(error));
+    .then(() => {
+      Product.find({}, (err, products) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render('customer', { products: products })
+        }
+      })
+    })
 });
 
+// customer page
+app.get('/customer', connectEnsureLogin.ensureLoggedIn('/customer-login'), (req, res) => {
+  Product.find({}, (err, products) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('customer', { products: products });
+    }
+  });
+});
 
 // Show create shipper account form
 app.get('/shipper-new', (req, res) => {
@@ -177,7 +204,13 @@ app.post('/shipper', (req, res,) => {
 
 // For vendors to view their products
 app.get('/vendor-view-products', (req, res) => {
-  res.render('vendor-view-products')
+  Product.find({ vendor: req.user._id }, (err, products) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('vendor-view-products', { products: products });
+    }
+  });
 });
 
 // For vendors to add new products
@@ -199,19 +232,30 @@ app.get("/register", isLoggedIn, function (req, res) {
   res.render("set-up-account");
 });
 
-//Showing login form
+// Login page
 app.get("/login", function (req, res) {
   res.render("login");
 });
 
-//Handling user login
+// Customer login page
+app.get("/customer-login", function (req, res) {
+  res.render("customer-login");
+});
 
-app.post("/login", async function (req, res) {
+// Shipper login page
+app.get("/shipper-login", function (req, res) {
+  res.render("shipper-login");
+});
+
+// Vendor login page
+app.get("/vendor-login", function (req, res) {
+  res.render("vendor-login");
+});
+
+//Handling vendor login
+app.post("/vendor-login", async function (req, res) {
   try {
-    // check if the user exists
     const vendor = await Vendor.findOne({ username: req.body.username });
-    const shipper = await Shipper.findOne({ username: req.body.username });
-    const customer = await Customer.findOne({ username: req.body.username });
     if (vendor) {
       //check if password matches
       const result = await vendor.comparePassword(req.body.password)
@@ -220,7 +264,42 @@ app.post("/login", async function (req, res) {
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
+    } else {
+      res.status(400).json({ error: "Account doesn't exist" });
     }
+  }
+  catch (error) {
+    res.status(400).json({ error });
+  }
+});
+
+//Handling customer login
+app.post("/customer-login", async function (req, res) {
+  try {
+    const customer = await Customer.findOne({ username: req.body.username });
+    if (customer) {
+      //check if password matches
+      const result = await customer.comparePassword(req.body.password)
+      if (result) {
+        Product.find().then((products) => {
+          res.render('customer', { products: products });
+        })
+      } else {
+        res.status(400).json({ error: "password doesn't match" });
+      }
+    } else {
+      res.status(400).json({ error: "Account doesn't exist" });
+    }
+  }
+  catch (error) {
+    res.status(400).json({ error });
+  }
+});
+
+//Handling shipper login
+app.post("/shipper-login", async function (req, res) {
+  try {
+    const shipper = await Shipper.findOne({ username: req.body.username });
     if (shipper) {
       //check if password matches
       const result = await shipper.comparePassword(req.body.password)
@@ -229,23 +308,14 @@ app.post("/login", async function (req, res) {
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
-    }
-    if (customer) {
-      //check if password matches
-      const result = await customer.comparePassword(req.body.password)
-      if (result) {
-        res.render('customer');
-      } else {
-        res.status(400).json({ error: "password doesn't match" });
-      }
     } else {
-      res.status(400).json({ error: "User doesn't exist" });
+      res.status(400).json({ error: "Account doesn't exist" });
     }
-  } catch (error) {
+  }
+  catch (error) {
     res.status(400).json({ error });
   }
 });
-
 
 //Handling user logout 
 app.get("/logout", function (req, res) {
@@ -270,6 +340,10 @@ app.get('/shipper-order-detail', (req, res) => {
   res.render('shipper-order-detail')
 });
 
+// Vendor page
+app.get('/vendor', (req, res) => {
+  res.render('vendor')
+});
 
 
 

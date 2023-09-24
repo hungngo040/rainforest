@@ -10,31 +10,33 @@ Author: Group 21
 const mongoose = require('mongoose')
 
 const ProductSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minlength: 10,
-      maxlength: 20,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  
-    description: {
-      type: String,
-      required: true,
-      maxlength: 500,
-    },
-    category: {
-      type: String,
-      enum: ['Smartphone', 'Laptop', 'Acessories']
-    }
-  });
+  name: {
+    type: String,
+    required: true,
+    minlength: 10,
+    maxlength: 20,
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
 
-  module.exports = mongoose.model('Product', ProductSchema)
-
+  description: {
+    type: String,
+    required: true,
+    maxlength: 500,
+  },
+  category: {
+    type: String,
+    enum: ['Smartphone', 'Laptop', 'Acessories']
+  },
+  vendor: {
+    type: mongoose.Schema.Types.ObjectId,
+    reference: 'Vendor',
+    required: true,
+  },
+});
 
 module.exports = mongoose.model('Product', ProductSchema);
 

@@ -9,41 +9,43 @@ Author: Group 21
 <%- include('partials/header.ejs') %>
 
 <main>
-  <div class="album py-5 bg-body-tertiary" id="products">
-    <div class="container">
-      <form action="/filtered" method="get">
-        <input type="number" id="min" name="min" placeholder="Min">
-        <input type="number" id="max" name="max" placeholder="Max">
-        <input type="submit" id="enter" class="btn btn-success" value="Enter">
-      </form>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <% products.forEach(function(product){ %>
-        <div class="col">
-          <div class="card shadow-sm">
-            <img src="/images/<%= product.image %>" alt="<%= product.image %>">
-            <div class="card-body">
-              <h3 class="card-title">
-                <%= product.name %>
-              </h3>
-              <h4 class="card-text text-dark">
-                <%= product.price %> $
-              </h4>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a href="view-product/<%= product.id %>" type="button" class="btn btn-outline-success me-2">View</a>
+  <div class="container-fluid p-5 bg-body-tertiary" id="jumbotron">
+    <div class="container bg-dark-subtle rounded-3 py-5">
+      <div class="container px-5">
+        <h1 class="display-4 fw-bold">
+          Welcome to Rainforest 🌳
+        </h1>
+        <h3 class="display-6 py-4 fw-bold">
+          The ultimate online destination for tech products
+        </h3>
+        <p class="col-md-11 fs-5 ">
+          Shop from a wide range of laptops, smartphones, tablets, gaming consoles, smartwatches, headphones, and more
+          at the best prices and with fast and free delivery.
+        </p>
+        <p class="col-md-11 fs-5 ">
+          Explore our latest deals, new arrivals, best sellers, and customer favorites.
+        </p>
+        <p class="col-md-11 fs-5 ">
+          Join the Rainforest community and share your reviews, ratings, questions, and feedback with other tech
+          enthusiasts.
+        </p>
+        <p class="col-md-11 fs-5 ">
+          Need help? Contact our friendly and knowledgeable customer service team via live chat, phone, or email.
+        </p>
+        <p class="col-md-11 fs-5 ">
+          Sign up or login to your account to start your shopping adventure today with Rainforest, the best place to buy
+          tech products online. 😊
+        </p>
 
+        <div class="row mx-auto mt-3">
+          <div class="col-lg-6 pt-3 text-center">
+            <a href="/login"><button type="button" class="btn btn-success me-2 w-50">Login</button></a>
+          </div>
 
-
-
-
-
-   
-                </div>
-              </div>
-            </div>
+          <div class="col-lg-6 pt-3 text-center">
+            <a href="/register"><button type="button" class="btn btn-success me-2 w-50">Sign Up</button></a>
           </div>
         </div>
-        <% }); %>
       </div>
     </div>
   </div>
