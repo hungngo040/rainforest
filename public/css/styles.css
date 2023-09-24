@@ -5,6 +5,13 @@ Semester: 2023B
 Assessment: Assignment 3
 Author: Group 21
 */
+
+body{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 header {
     box-shadow: 1px 1px 1px 1px darkgray;
 }
@@ -18,3 +25,7 @@ footer ul li a:hover {
     background: white;
     border-radius: 50%;
 } */
+
+footer {
+    margin-top: auto;
+}

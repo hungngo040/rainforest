@@ -110,7 +110,13 @@ app.get('/view-product/:id', (req, res) => {
     .catch((error) => res.send(error));
 });
 
+app.get('/about', (req, res) => {
+  res.render('about');
+})
 
+app.get('/copyright', (req, res) => {
+  res.render('copyright');
+})
 
 app.get('/register', (req, res) => {
   res.render('register');
@@ -180,7 +186,7 @@ app.post('/product', (req, res) => {
 
 // Showing secret page
 app.get("/register", isLoggedIn, function (req, res) {
-  es.render("set-up-account");
+  res.render("set-up-account");
 });
 
 //Showing login form
