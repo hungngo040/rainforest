@@ -1,0 +1,75 @@
+<%# 
+RMIT University Vietnam
+Course: COSC2430 Web Programming
+Semester: 2023B
+Assessment: Assignment 3
+Author: Group 21
+Acknowledgement: Bing AI
+ %>
+
+<%- include('partials/header') %>
+
+<main>
+  <section>
+    <div class="container">
+      <div class="row">
+        <div class="col text-center my-3 py-3">
+          <h1>Help</h1>
+        </div>
+      </div>
+    </div>
+    <div class="container bg-body-secondary footer-pages-center w-75">
+      <div class="row px-5">
+        <div class="col mx-4 px-5 py-4">
+          <p>
+            Welcome to Rainforest, the ultimate online destination for tech products. Whether you are looking for
+            laptops, smartphones, tablets, gaming consoles, smartwatches, headphones, or anything else, we have it all
+            at the best prices and with fast and free delivery. Please feel free to contact us through the form on the
+            bottom of this page if you have any questions or feedback.
+          <p>
+            We hope you enjoy shopping with Rainforest, the best place to buy tech products online. If you have any
+            questions or feedback, please let us know. We are always happy to hear from you. 😊
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container w-75 my-4">
+      <div class="row">
+        <div class="col-lg-6 pe-5">
+          <form action="/help-submitted" method="POST">
+            <h4>Contact Us</h4>
+            <div class="mb-2">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" id="name" placeholder="Your name" required>
+            </div>
+            <div class="mb-2">
+              <label for="email" class="form-label">Email</label>
+              <input type="text" name="email" class="form-control" id="email" placeholder="Your email" required>
+            </div>
+            <div class="mb-2">
+              <label for="query" class="form-label">Query</label>
+              <textarea rows="5" name="query" class="form-control" id="query" required></textarea>
+            </div>
+            <div class="mb-2">
+              <input type="submit" value="Submit" class="form-control btn btn-success w-25">
+            </div>
+          </form>
+        </div>
+
+        <div class="col-lg-6">
+          <h6>Rainforest</h6>
+          <p>
+            521 Kim Ma, Ba Dinh, Hanoi, Vietnam
+          </p>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.07926242403!2d105.80889347542801!3d21.029514287752317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab730d0a2249%3A0xc7bc781234943dcb!2zVHLGsOG7nW5nIMSQ4bqhaSBI4buNYyBSTUlULCBjxqEgc-G7nyBIw6AgTuG7mWk!5e0!3m2!1svi!2s!4v1695537412071!5m2!1svi!2s"
+            width="500" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+<%- include('partials/footer.ejs') %>

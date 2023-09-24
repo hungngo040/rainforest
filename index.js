@@ -19,6 +19,7 @@ const Vendor = require('./model/Vendor');
 const Shipper = require('./model/Shipper');
 const Customer = require('./model/Customer');
 const Product = require('./model/Product');
+const Help = require('./model/Help');
 
 const Cart = require('./model/Cart');
 const Order = require('./model/Order');
@@ -166,7 +167,7 @@ app.get('/shipper-new', (req, res) => {
 });
 
 // create new shipper account
-app.post('/shipper',(req, res,) => {
+app.post('/shipper', (req, res,) => {
   console.log(req.body);
   const shipper = new Shipper(req.body);
   shipper.save()
@@ -272,13 +273,39 @@ app.get('/shipper-order-detail', (req, res) => {
 
 
 
+// About page
+app.get('/about', (req, res) => {
+  res.render('about')
+});
+
+// Copyright page
+app.get('/copyright', (req, res) => {
+  res.render('copyright')
+});
 
 // Cart page
 app.get('/cart', (req, res) => {
   res.render('cart')
 });
 
+// Privacy page
+app.get('/privacy', (req, res) => {
+  res.render('privacy')
+});
 
+// Help page
+app.get('/help', (req, res) => {
+  res.render('help')
+});
+
+// Handling help form
+app.post('/help-submitted', (req, res) => {
+  console.log(req.body);
+  const help = new Help(req.body);
+  help.save()
+    .then(() => res.send('Thank you for summiting your query! We will get back to you soon.'))
+    .catch(error => res.send(error));
+})
 
 // 404 page
 app.get('*', (req, res) => {
