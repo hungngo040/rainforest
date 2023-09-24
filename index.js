@@ -198,7 +198,7 @@ app.post('/shipper', (req, res,) => {
   console.log(req.body);
   const shipper = new Shipper(req.body);
   shipper.save()
-    .then(() => res.render('create-account-successful'))
+    .then(() => res.render('shipper'))
     .catch(error => send.send(error));
 });
 
