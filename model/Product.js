@@ -31,11 +31,6 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     enum: ['Smartphone', 'Laptop', 'Acessories']
   },
-  vendor: {
-    type: mongoose.Schema.Types.ObjectId,
-    reference: 'Vendor',
-    required: true,
-  },
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

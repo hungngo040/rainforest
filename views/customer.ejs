@@ -11,36 +11,46 @@ Author: Group 21
 <main>
   <div class="album py-5 bg-body-tertiary" id="products">
     <div class="container">
-      <form action="/filtered" method="get">
-        <input type="number" id="min" name="min" placeholder="Min">
-        <input type="number" id="max" name="max" placeholder="Max">
-        <input type="submit" id="enter" class="btn btn-success" value="Enter">
-      </form>
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="/search" method="get">
-        <input type="search" class="form-control form-control-dark" name="search" placeholder="Search..."
-          aria-label="Search">
-      </form>
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <% products.forEach((product) => { %>
-        <div class="col">
-          <div class="card shadow-sm">
-            <img src="/images/<%= product.image %>" alt="<%= product.image %>">
-            <div class="card-body">
-              <h3 class="card-title">
-                <%= product.name %>
-              </h3>
-              <h4 class="card-text text-dark">
-                <%= product.price %>
-              </h4>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a href="view-product/<%= product.id %>" type="button" class="btn btn-outline-success me-2">View</a>
+      <div class="row">
+        <div class="col-2 mx-3">
+          <aside class=" w-100">
+            <form class=" mb-5" action="/search" method="get">
+              <input type="search" class="form-control form-control-dark w-100" name="search"
+                placeholder="Search products" aria-label="Search">
+            </form>
+            <form action="/filtered" method="get">
+              <h6>Filter products</h6>
+              <input type="number" id="min" name="min" placeholder="Minimum price" class="my-2">
+              <input type="number" id="max" name="max" placeholder="Maximum price" class="my-2">
+              <input type="submit" id="enter" class="btn btn-success my-2" value="Enter">
+            </form>
+          </aside>
+        </div>
+        <div class="col-9 mx-3">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <% products.forEach((product) => { %>
+            <div class="col">
+              <div class="card shadow-sm">
+                <img src="/images/<%= product.image %>" alt="<%= product.image %>">
+                <div class="card-body">
+                  <h3 class="card-title">
+                    <%= product.name %>
+                  </h3>
+                  <h4 class="card-text text-dark">
+                    <%= product.price %>
+                  </h4>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <a href="view-product/<%= product.id %>" type="button"
+                        class="btn btn-outline-success me-2">View</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <% }); %>
           </div>
         </div>
-        <% }); %>
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@ Author: Group 21
 -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
   <head>
     <meta charset="UTF-8">
@@ -22,19 +22,26 @@ Author: Group 21
       integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
   </head>
 
-  <body>
-    <header class="p-3  bg-body-secondary">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+  <body class="d-flex flex-column h-100">
+    <header class="bg-body-secondary">
+      <nav class="navbar navbar-expand-lg bg-body-secondary">
+        <div class="container-fluid">
           <a href="/" class="d-flex align-items-center me-5 mb-2 mb-lg-0">
             <img src="/images/logo-horizontal.png" height="45">
           </a>
-
-          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="/" class="nav-link px-3 text-dark">Home</a></li>
-            <li><a href="#" class="nav-link px-3 text-dark">All Categories</a></li>
-
-          </ul>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item"><a href="/" class="nav-link px-3 text-dark">Home</a></li>
+              <li class="nav-item"><a href="#" class="nav-link px-3 text-dark">Smartphone</a></li>
+              <li class="nav-item"><a href="#" class="nav-link px-3 text-dark">Laptop</a></li>
+              <li class="nav-item"><a href="#" class="nav-link px-3 text-dark">Accessories</a></li>
+              <li class="nav-item"><a href="#" class="nav-link px-3 text-dark">My Account</a></li>
+            </ul>
+          </div>
           <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="/search" method="get">
             <input type="search" class="form-control form-control-dark" name="search" placeholder="Search..."
               aria-label="Search">
@@ -43,5 +50,5 @@ Author: Group 21
                 out</button></a>
           </div>
         </div>
-      </div>
+      </nav>
     </header>
