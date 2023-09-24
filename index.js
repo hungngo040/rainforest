@@ -181,7 +181,7 @@ app.post('/product', (req, res) => {
 
 // Showing secret page
 app.get("/register", isLoggedIn, function (req, res) {
-  es.render("set-up-account");
+  res.render("set-up-account");
 });
 
 //Showing login form
