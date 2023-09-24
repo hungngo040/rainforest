@@ -1,7 +1,15 @@
+/*
+RMIT University Vietnam
+Course: COSC2430 Web Programming
+Semester: 2023B
+Assessment: Assignment 3
+Author: Group 21
+*/
+
 const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose');
 const bcrypt = require('bcrypt')
-
+// create schema
 const CustomerSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -15,7 +23,19 @@ const CustomerSchema = new mongoose.Schema({
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/;
         return regex.test(value);
       },
+
+      required: true,
+
+      minlength:8,
+
+      maxlength:20
+      },
+    name: {
+      type: String,
+      required: true,
+
       message: 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+
     },
     required: true,
     minlength: 8,
@@ -31,7 +51,7 @@ const CustomerSchema = new mongoose.Schema({
   }
 
 });
-
+// hash the password
 CustomerSchema.pre('save', function (next) {
   if (this.isModified('password')) {
     bcrypt.hash(this.password, 8, (err, hash) => {
@@ -42,6 +62,7 @@ CustomerSchema.pre('save', function (next) {
     });
   }
 });
+// Compare the password
 CustomerSchema.methods.comparePassword = async function (password) {
   if (!password) throw new Error('Password is mission, can not compare!');
 
