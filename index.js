@@ -204,13 +204,7 @@ app.post('/shipper', (req, res,) => {
 
 // For vendors to view their products
 app.get('/vendor-view-products', (req, res) => {
-  Product.find({ vendor: req.user._id }, (err, products) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('vendor-view-products', { products: products });
-    }
-  });
+  res.render('vendor-view-products');
 });
 
 // For vendors to add new products
