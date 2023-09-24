@@ -31,7 +31,12 @@ const ShipperSchema = new mongoose.Schema({
   assigned_distribution_hub: {
     type: String,
     enum: ['Hanoi', 'Da Nang', 'Ho Chi Minh']
-  }
+  },
+  profile_picture: {
+    data: Buffer,
+    contentType: String
+  },
+
 
 });
 ShipperSchema.pre('save', function (next) {
