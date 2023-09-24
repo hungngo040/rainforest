@@ -19,8 +19,10 @@ const Vendor = require('./model/Vendor');
 const Shipper = require('./model/Shipper');
 const Customer = require('./model/Customer');
 const Product = require('./model/Product');
+
 const Cart = require('./model/Cart');
 const Order = require('./model/Order');
+
 
 const fs = require('fs');
 require('dotenv').config();
@@ -57,7 +59,6 @@ mongoose.connect('mongodb+srv://PhapNguyen:29122002pP@cluster0.odlrcvo.mongodb.n
   .catch((error) => console.log(error.message));
 
 
-
 app.use(express.urlencoded({ extended: true }));
 
 //ROUTES
@@ -70,7 +71,7 @@ app.get('/', (req, res) => {
     })
     .catch((error) => console.log(error.message));
 });
-
+// Filter product
 app.get('/filtered', (req, res) => {
   const { min, max } = req.query;
 
@@ -83,7 +84,7 @@ app.get('/filtered', (req, res) => {
     })
     .catch((error) => res.send(error));
 });
-
+// Search product
 app.get('/search', (req, res) => {
   const { search } = req.query;
 
@@ -97,7 +98,7 @@ app.get('/search', (req, res) => {
     .catch((error) => res.send(error));
 });
 
-
+// view product
 app.get('/view-product/:id', (req, res) => {
   Product.findById(req.params.id)
     .then((product) => {
@@ -125,7 +126,7 @@ app.post('/vendor', (req, res) => {
   console.log(req.body);
   const vendor = new Vendor(req.body);
   vendor.save()
-    .then(() => res.send('Create account successful'))
+    .then(() => res.render('create-account-successful'))
     .catch(error => res.send(error));
 });
 
@@ -139,7 +140,7 @@ app.post('/customer', (req, res) => {
   console.log(req.body);
   const customer = new Customer(req.body);
   customer.save()
-    .then(() => res.send('Create account successful'))
+    .then(() => res.render('create-account-successful'))
     .catch(error => res.send(error));
 });
 
@@ -149,13 +150,13 @@ app.get('/shipper-new', (req, res) => {
   res.render('create-shipper-account')
 });
 
-// create new customer account
-app.post('/shipper', (req, res) => {
+// create new shipper account
+app.post('/shipper',(req, res,) => {
   console.log(req.body);
   const shipper = new Shipper(req.body);
   shipper.save()
-    .then(() => res.send('Create account successful'))
-    .catch(error => res.send(error));
+    .then(() => res.render('create-account-successful'))
+    .catch(error => send.send(error));
 });
 
 // For vendors to view their products
@@ -189,7 +190,6 @@ app.get("/login", function (req, res) {
 
 //Handling user login
 
-
 app.post("/login", async function (req, res) {
   try {
     // check if the user exists
@@ -209,16 +209,9 @@ app.post("/login", async function (req, res) {
       //check if password matches
       const result = await shipper.comparePassword(req.body.password)
       if (result) {
-        res.render("shipper");
+        res.render('shipper');
       } else {
         res.status(400).json({ error: "password doesn't match" });
-      }
-    }
-    if (customer) {
-      //check if password matches
-      const result = req.body.password === customer.password;
-      if (result) {
-        res.render("customer");
       }
     }
     if (customer) {
@@ -236,6 +229,7 @@ app.post("/login", async function (req, res) {
     res.status(400).json({ error });
   }
 });
+
 
 //Handling user logout 
 app.get("/logout", function (req, res) {
@@ -259,10 +253,24 @@ app.get('/shipper-order-detail', (req, res) => {
   res.render('shipper-order-detail')
 });
 
+
+// save image on mongoDb Atlas
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'uploads')
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now())
+  }
+});
+
+
+
 // Cart page
 app.get('/cart', (req, res) => {
   res.render('cart')
 });
+
 
 
 // 404 page

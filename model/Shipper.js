@@ -1,3 +1,10 @@
+/*
+RMIT University Vietnam
+Course: COSC2430 Web Programming
+Semester: 2023B
+Assessment: Assignment 3
+Author: Group 21
+*/
 const mongoose = require('mongoose')
 const passportLocalMongoose = require('passport-local-mongoose');
 const bcrypt = require('bcrypt')
